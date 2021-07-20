@@ -18,6 +18,25 @@ export default class App extends Component {
 
   filterInputId = uuidv4();
 
+  // Local Storage Start //
+
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contacts);
+
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  componentDidUpdate(_, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
+  // Local Storage End //
+
   addContact = ({ name, number }) => {
     const contact = {
       id: uuidv4(),
@@ -31,6 +50,8 @@ export default class App extends Component {
       )
     ) {
       alert(`${name} is already in contacts.`);
+    } else if (name.trim() === '' || number.trim() === '') {
+      alert(`Please enter at least some data`);
     } else {
       this.setState(prevState => ({
         contacts: [contact, ...prevState.contacts],
