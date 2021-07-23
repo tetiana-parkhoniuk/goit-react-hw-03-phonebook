@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import toast, { Toaster } from 'react-hot-toast';
 import ContactForm from 'components/ContactForm';
 import Filter from 'components/Filter';
 import ContactsList from 'components/ContactsList';
@@ -49,9 +50,9 @@ export default class App extends Component {
         contact => contact.name.toLowerCase() === name.toLowerCase(),
       )
     ) {
-      alert(`${name} is already in contacts.`);
+      toast.error(`${name} is already in contacts.`);
     } else if (name.trim() === '' || number.trim() === '') {
-      alert(`Please enter at least some data`);
+      toast.error('Please enter at least some data');
     } else {
       this.setState(prevState => ({
         contacts: [contact, ...prevState.contacts],
@@ -84,6 +85,8 @@ export default class App extends Component {
 
     return (
       <div className={styles.container}>
+        <Toaster position="top-right" toastOptions={{ duration: 2000 }} />
+
         <h1>Phonebook</h1>
 
         <ContactForm onSubmit={this.addContact} />
